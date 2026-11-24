@@ -5,8 +5,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('enrollment.urls')),           # Keep your existing app path
-    path('facebook/', include('profile_app.urls')), # Add Facebook clone
+    path('', include('enrollment.urls')),           
+    path('facebook/', include('profile_app.urls')),
+     path('api/', include('ecommerce_api.urls')), 
 ]
 
 if settings.DEBUG:

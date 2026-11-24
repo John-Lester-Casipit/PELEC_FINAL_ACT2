@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enrollment',
     'profile_app',
+    'rest_framework',
+    'ecommerce_api',
 ]
 
 MEDIA_URL = '/media/'
