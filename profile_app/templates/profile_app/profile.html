@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ profile.full_name }} | Facebook</title>
+  <link rel="stylesheet" href="{% static 'css/facebook.css' %}">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="fb-nav">
+    <a href="{% url 'profile' %}" class="fb-logo">facebook</a>
+    <input type="text" class="fb-search" placeholder="Search Facebook">
+  </nav>
+
+  <!-- Cover & Profile Header -->
+  <div class="fb-header-wrap">
+    <div class="fb-container">
+      <div class="fb-cover"></div>
+
+      <div class="fb-profile-bar">
+        <div class="fb-avatar-group">
+          {% if profile.profile_pic %}
+            <img src="{{ profile.profile_pic.url }}" alt="{{ profile.full_name }}" class="fb-avatar">
+          {% else %}
+            <img src="{% static 'images/default-avatar.png' %}" alt="Default Profile" class="fb-avatar">
+          {% endif %}
+
+          <div class="fb-name-block">
+            <h1>{{ profile.full_name }}</h1>
+            <div class="fb-friends">512 friends</div>
+          </div>
+        </div>
+
+        <div class="fb-actions">
+          <button type="button" onclick="toggleEditSection()" class="btn-fb-primary">+ Update Profile Photo</button>
+          <button type="button" onclick="toggleEditSection()" class="btn-fb-secondary">Edit Profile</button>
+        </div>
+      </div>
+
+      <div class="fb-tabs">
+        <a href="#" class="fb-tab active">Posts</a>
+        <a href="#" class="fb-tab">About</a>
+        <a href="#" class="fb-tab">Friends</a>
+        <a href="#" class="fb-tab">Photos</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Two-Column Profile Body (Always Visible) -->
+  <div class="fb-grid">
+    <!-- Left Column: Intro -->
+    <div>
+      <div class="fb-card">
+        <h2>Intro</h2>
+        <p class="fb-bio">{{ profile.bio }}</p>
+        <div class="fb-intro-item"><span>Studies at</span> <strong>{{ profile.course }}</strong></div>
+        <div class="fb-intro-item"><span>Lives in</span> <strong>{{ profile.location }}</strong></div>
+        <div class="fb-intro-item"><span>Section</span> <strong>BSIT-3B</strong></div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div>
+      <!-- ONLY this card is hidden until Edit Profile / Update Profile Photo is clicked -->
+      <div class="fb-card" id="upload-section" style="display: none;">
+        <h2>Update Profile Picture & Info</h2>
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <label class="fb-label">Choose Profile Picture (Media Upload)</label>
+          {{ form.profile_pic }}
+
+          <label class="fb-label">Full Name</label>
+          {{ form.full_name }}
+
+          <label class="fb-label">Bio</label>
+          {{ form.bio }}
+
+          <label class="fb-label">Course</label>
+          {{ form.course }}
+
+          <label class="fb-label">Location</label>
+          {{ form.location }}
+
+          <button type="submit" class="btn-fb-primary" style="width:100%; margin-top:1rem;">
+            Save Changes & Upload Photo
+          </button>
+        </form>
+      </div>
+
+      <!-- Sample Status Post (Always Visible) -->
+      <div class="fb-card">
+        <div class="fb-post-header">
+          {% if profile.profile_pic %}
+            <img src="{{ profile.profile_pic.url }}" alt="{{ profile.full_name }}" class="fb-post-mini-avatar">
+          {% else %}
+            <img src="{% static 'images/default-avatar.png' %}" alt="Default Profile" class="fb-post-mini-avatar">
+          {% endif %}
+          <div>
+            <strong>{{ profile.full_name }}</strong>
+            <div class="fb-post-meta">Updated profile picture · Just now · Public</div>
+          </div>
+        </div>
+        <p class="fb-post-body">
+          NO TO PAX SILICA #JEOLEE
+        </p>
+        <div class="fb-post-footer">
+          <span>Like</span>
+          <span>Comment</span>
+          <span>Share</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleEditSection() {
+      const editCard = document.getElementById('upload-section');
+      if (editCard.style.display === 'none') {
+        editCard.style.display = 'block';
+      } else {
+        editCard.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>
